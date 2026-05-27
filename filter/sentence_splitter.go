@@ -1,10 +1,5 @@
 package filter
 
-import (
-	"unicode"
-	"unicode/utf8"
-)
-
 // SentenceSplitter is a tiny sentence splitter for japanese texts.
 type SentenceSplitter struct {
 	Delim               []rune // delimiter set. ex. {'。','．'}
@@ -28,109 +23,28 @@ var defaultSplitter = &SentenceSplitter{
 //
 //nolint:nonamedreturns
 func ScanSentences(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	return defaultSplitter.ScanSentences(data, atEOF)
+	_ = "STUB: not implemented"
+	return 0, nil, nil
 }
 
-func (s SentenceSplitter) isDelim(r rune) bool {
-	for _, d := range s.Delim {
-		if r == d {
-			return true
-		}
-	}
-	return false
-}
+func (s SentenceSplitter) isDelim(r rune) bool { _ = "STUB: not implemented"; return false }
 
-func (s SentenceSplitter) isFollower(r rune) bool {
-	for _, d := range s.Follower {
-		if r == d {
-			return true
-		}
-	}
-	return false
-}
+func (s SentenceSplitter) isFollower(r rune) bool { _ = "STUB: not implemented"; return false }
 
 // ScanSentences is a split function for a Scanner that returns each sentence of text.
 //
 //nolint:gocyclo,funlen,nonamedreturns
 func (s SentenceSplitter) ScanSentences(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	if atEOF && len(data) == 0 {
-		return 0, nil, nil
-	}
-	var (
-		start, end, rcount int
-		head, nn           bool // nn indicates \n\n
-	)
-	head = true
-	for p := 0; p < len(data); {
-		r, size := utf8.DecodeRune(data[p:])
-		if s.SkipWhiteSpace && unicode.IsSpace(r) {
-			p += size
-			switch {
-			case head:
-				start, end = p, p
-			case s.isDelim(r):
-				return p, data[start:end], nil
-			case s.DoubleLineFeedSplit && r == '\n':
-				if nn {
-					return p, data[start:end], nil
-				}
-				nn = true
-			case nn:
-				nn = false
-			}
-			continue
-		}
-		head = false
-		if end != p {
-			for i := range size {
-				data[end+i] = data[p+i]
-			}
-		}
-		p += size
-		end += size
-		rcount++
-		if s.DoubleLineFeedSplit && r == '\n' {
-			if nn {
-				return p, data[start:end], nil
-			}
-			nn = true
-		}
-		if !s.isDelim(r) && rcount < s.MaxRuneLen {
-			continue
-		}
-		// split
-		nn = false
-		for p < len(data) {
-			r, size := utf8.DecodeRune(data[p:])
-			if s.SkipWhiteSpace && unicode.IsSpace(r) { //nolint:gocritic,nestif
-				p += size
-				if s.DoubleLineFeedSplit && r == '\n' {
-					if nn {
-						return p, data[start:end], nil
-					}
-					nn = true
-				}
-			} else if s.isDelim(r) || s.isFollower(r) {
-				if end != p {
-					for i := range size {
-						data[end+i] = data[p+i]
-					}
-				}
-				p += size
-				end += size
-			} else {
-				break
-			}
-		}
-		return p, data[start:end], nil
-	}
-	if !atEOF {
-		// Request more data
-		for i := end; i < len(data); i++ {
-			data[i] = ' '
-		}
-		return start, nil, nil
-	}
-	// If we're at EOF, we have a final, non-terminated line. Return it.
-	return len(data), data[start:end], nil
+	_ = "STUB: not implemented"
+	return 0, nil, nil
 }
+
+// nn indicates \n\n
+
+// split
+
+//nolint:gocritic,nestif
+
+// Request more data
+
+// If we're at EOF, we have a final, non-terminated line. Return it.

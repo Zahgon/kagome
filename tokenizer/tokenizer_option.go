@@ -1,8 +1,6 @@
 package tokenizer
 
 import (
-	"errors"
-
 	"github.com/ikawaha/kagome-dict/dict"
 )
 
@@ -10,27 +8,10 @@ import (
 type Option func(*Tokenizer) error
 
 // Nop represents a no operation option.
-func Nop() Option {
-	return func(t *Tokenizer) error {
-		return nil
-	}
-}
+func Nop() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // UserDict is a tokenizer option to sets a user dictionary.
-func UserDict(d *dict.UserDict) Option {
-	return func(t *Tokenizer) error {
-		if d == nil {
-			return errors.New("empty user dictionary")
-		}
-		t.userDict = d
-		return nil
-	}
-}
+func UserDict(d *dict.UserDict) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // OmitBosEos is a tokenizer option to omit BOS/EOS from output tokens.
-func OmitBosEos() Option {
-	return func(t *Tokenizer) error {
-		t.omitBosEos = true
-		return nil
-	}
-}
+func OmitBosEos() Option { _ = "STUB: not implemented"; return *new(Option) }

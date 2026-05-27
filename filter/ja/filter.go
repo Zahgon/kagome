@@ -2,8 +2,6 @@ package ja
 
 import (
 	_ "embed"
-	"fmt"
-	"strings"
 
 	"github.com/ikawaha/kagome/v2/filter"
 	"github.com/ikawaha/kagome/v2/tokenizer"
@@ -21,37 +19,25 @@ type FilterOption func(*Filter)
 
 // BaseFormFilterOption returns a base form filter option.
 func BaseFormFilterOption(p []filter.POS) FilterOption {
-	return func(f *Filter) {
-		f.baserForm = filter.NewPOSFilter(p...)
-	}
+	_ = "STUB: not implemented"
+	return *new(FilterOption)
 }
 
 // StopTagsFilterOption returns a stop tags filter option.
 func StopTagsFilterOption(p []filter.POS) FilterOption {
-	return func(f *Filter) {
-		f.stopTags = filter.NewPOSFilter(p...)
-	}
+	_ = "STUB: not implemented"
+	return *new(FilterOption)
 }
 
 // StopWordsFilterOption returns a stop words filter option.
 func StopWordsFilterOption(p []string) FilterOption {
-	return func(f *Filter) {
-		f.stopWords = filter.NewWordFilter(p)
-	}
+	_ = "STUB: not implemented"
+	return *new(FilterOption)
 }
 
 // NewFilter returns a filter with the settings commonly used in lucene.
 // To customize, set the options and overwrite the filter.
-func NewFilter(opts ...FilterOption) (*Filter, error) {
-	ret, err := newDefaultLuceneFilter()
-	if err != nil {
-		return nil, err
-	}
-	for _, opt := range opts {
-		opt(ret)
-	}
-	return ret, err
-}
+func NewFilter(opts ...FilterOption) (*Filter, error) { _ = "STUB: not implemented"; return nil, nil }
 
 //go:embed asset/stop_tags.txt
 var stopTags []byte
@@ -70,69 +56,20 @@ const (
 	POS_形容動詞 = "形容動詞" //nolint:asciicheck,gosmopolitan
 )
 
-func newDefaultLuceneFilter() (*Filter, error) {
-	ta, err := newDefaultLuceneStopTagPOSFilter()
-	if err != nil {
-		return nil, fmt.Errorf("failed to load stop tags: %w", err)
-	}
-	wo, err := newDefaultLuceneStopWordFilter()
-	if err != nil {
-		return nil, fmt.Errorf("failed to load stop words: %w", err)
-	}
-	return &Filter{
-		baserForm: filter.NewPOSFilter(filter.POS{POS_動詞}, filter.POS{POS_形容詞}, filter.POS{POS_形容動詞}),
-		stopTags:  ta,
-		stopWords: wo,
-	}, nil
-}
+func newDefaultLuceneFilter() (*Filter, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func newDefaultLuceneStopTagPOSFilter() (*filter.POSFilter, error) {
-	t, err := loadConfig(stopTags)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load stop tags: %w", err)
-	}
-	ps := make([]filter.POS, 0, len(t))
-	for _, v := range t {
-		pos := strings.Split(v, "-")
-		for i := len(pos); i < posHierarchy; i++ {
-			pos = append(pos, defaultPOSFeature)
-		}
-		ps = append(ps, pos)
-	}
-	return filter.NewPOSFilter(ps...), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func newDefaultLuceneStopWordFilter() (*filter.WordFilter, error) {
-	t, err := loadConfig(stropWords)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load stop words: %w", err)
-	}
-	return filter.NewWordFilter(t), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Yield returns a filtered word sequence from a token sequence.
-func (f Filter) Yield(tokens []tokenizer.Token) []string {
-	ret := make([]string, 0, len(tokens))
-	for _, v := range tokens {
-		if f.stopTags.Match(v.POS()) {
-			continue
-		}
-		if f.stopWords.Match(v.Surface) {
-			continue
-		}
-		if f.baserForm.Match(v.POS()) {
-			if b, ok := v.BaseForm(); ok {
-				ret = append(ret, b)
-			}
-			continue
-		}
-		ret = append(ret, v.Surface)
-	}
-	return ret
-}
+func (f Filter) Yield(tokens []tokenizer.Token) []string { _ = "STUB: not implemented"; return nil }
 
 // Drop drops a token given the provided match function (stop-tags and stop-words).
-func (f Filter) Drop(tokens *[]tokenizer.Token) {
-	f.stopTags.Drop(tokens)
-	f.stopWords.Drop(tokens)
-}
+func (f Filter) Drop(tokens *[]tokenizer.Token) { _ = "STUB: not implemented"; return }

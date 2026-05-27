@@ -19,19 +19,7 @@ const (
 type NodeClass int
 
 // String returns a string representation of a node class.
-func (nc NodeClass) String() string {
-	switch nc {
-	case DUMMY:
-		return "DUMMY"
-	case KNOWN:
-		return "KNOWN"
-	case UNKNOWN:
-		return "UNKNOWN"
-	case USER:
-		return "USER"
-	}
-	return "UNDEF"
-}
+func (nc NodeClass) String() string { _ = "STUB: not implemented"; return "" }
 
 // Node is a lattice node.
 type Node struct {

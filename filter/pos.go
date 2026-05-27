@@ -15,40 +15,15 @@ type POSFilter struct {
 }
 
 // NewPOSFilter returns a part-of-speech filter.
-func NewPOSFilter(p ...POS) *POSFilter {
-	return &POSFilter{
-		filter: NewFeaturesFilter(p...),
-	}
-}
+func NewPOSFilter(p ...POS) *POSFilter { _ = "STUB: not implemented"; return nil }
 
 // Match returns true if a filter matches given POS.
-func (f POSFilter) Match(p POS) bool {
-	return f.filter.Match(p)
-}
+func (f POSFilter) Match(p POS) bool { _ = "STUB: not implemented"; return false }
 
 // Drop drops a token if a filter matches token's POS.
-func (f POSFilter) Drop(tokens *[]tokenizer.Token) {
-	f.apply(tokens, true)
-}
+func (f POSFilter) Drop(tokens *[]tokenizer.Token) { _ = "STUB: not implemented"; return }
 
 // Keep keeps a token if a filter matches token's POS.
-func (f POSFilter) Keep(tokens *[]tokenizer.Token) {
-	f.apply(tokens, false)
-}
+func (f POSFilter) Keep(tokens *[]tokenizer.Token) { _ = "STUB: not implemented"; return }
 
-func (f POSFilter) apply(tokens *[]tokenizer.Token, drop bool) {
-	if tokens == nil {
-		return
-	}
-	tail := 0
-	for i, v := range *tokens {
-		if f.Match(v.POS()) == drop {
-			continue
-		}
-		if i != tail {
-			(*tokens)[tail] = v
-		}
-		tail++
-	}
-	*tokens = (*tokens)[:tail]
-}
+func (f POSFilter) apply(tokens *[]tokenizer.Token, drop bool) { _ = "STUB: not implemented"; return }

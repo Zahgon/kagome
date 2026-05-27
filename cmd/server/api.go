@@ -1,8 +1,6 @@
 package server
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/ikawaha/kagome/v2/tokenizer"
@@ -26,39 +24,10 @@ type TokenizerResponseBody struct {
 }
 
 func (h *TokenizeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var req TokenizerRequestBody
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, fmt.Sprintf("{\"status\":false,\"error\":\"%v\"}", err), http.StatusBadRequest)
-		return
-	}
-	if req.Input == "" {
-		w.Write([]byte(`{"status":true,"tokens":[]}`)) //nolint:gosec
-		return
-	}
-	mode := tokenizer.Normal
-	switch req.Mode {
-	case "Search":
-		mode = tokenizer.Search
-	case "Extended":
-		mode = tokenizer.Extended
-	}
-	tokens := h.tokenizer.Analyze(req.Input, mode)
-	tokenData := make([]tokenizer.TokenData, 0, len(tokens))
-	for _, v := range tokens {
-		if v.ID == tokenizer.BosEosID {
-			continue
-		}
-		tokenData = append(tokenData, tokenizer.NewTokenData(v))
-	}
-	resp, err := json.Marshal(TokenizerResponseBody{
-		Status: true,
-		Tokens: tokenData,
-	})
-	if err != nil {
-		http.Error(w, fmt.Sprintf("{\"status\":false,\"error\":\"%v\"}", err), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(resp) //nolint:gosec
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec
+
+//nolint:gosec

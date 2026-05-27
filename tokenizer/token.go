@@ -1,9 +1,6 @@
 package tokenizer
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/ikawaha/kagome-dict/dict"
 	"github.com/ikawaha/kagome/v2/tokenizer/lattice"
 )
@@ -23,20 +20,7 @@ const (
 )
 
 // String returns string representation of a token class.
-func (c TokenClass) String() string {
-	ret := ""
-	switch c {
-	case DUMMY:
-		ret = "DUMMY"
-	case KNOWN:
-		ret = "KNOWN"
-	case UNKNOWN:
-		ret = "UNKNOWN"
-	case USER:
-		ret = "USER"
-	}
-	return ret
-}
+func (c TokenClass) String() string { _ = "STUB: not implemented"; return "" }
 
 // Token represents a morph of a sentence.
 type Token struct {
@@ -52,88 +36,12 @@ type Token struct {
 }
 
 // Features returns contents of a token.
-func (t Token) Features() []string {
-	switch t.Class {
-	case KNOWN:
-		var c int
-		if t.dict.Contents != nil {
-			c = len(t.dict.Contents[t.ID])
-		}
-		features := make([]string, 0, len(t.dict.POSTable.POSs[t.ID])+c)
-		for _, id := range t.dict.POSTable.POSs[t.ID] {
-			features = append(features, t.dict.POSTable.NameList[id])
-		}
-		if t.dict.Contents != nil {
-			features = append(features, t.dict.Contents[t.ID]...)
-		}
-		return features
-	case UNKNOWN:
-		features := make([]string, len(t.dict.UnkDict.Contents[t.ID]))
-		copy(features, t.dict.UnkDict.Contents[t.ID])
-		return features
-	case USER:
-		pos := t.udict.Contents[t.ID].Pos
-		tokens := strings.Join(t.udict.Contents[t.ID].Tokens, "/")
-		yomi := strings.Join(t.udict.Contents[t.ID].Yomi, "/")
-		return []string{pos, tokens, yomi}
-	case DUMMY:
-		return nil
-	}
-	return nil
-}
+func (t Token) Features() []string { _ = "STUB: not implemented"; return nil }
 
 // FeatureAt returns the i th feature if exists.
 //
 //nolint:gocyclo
-func (t Token) FeatureAt(i int) (string, bool) {
-	if i < 0 {
-		return "", false
-	}
-	switch t.Class {
-	case KNOWN:
-		pos := t.dict.POSTable.POSs[t.ID]
-		if i < len(pos) {
-			id := pos[i]
-			if int(id) > len(t.dict.POSTable.NameList) {
-				return "", false
-			}
-			return t.dict.POSTable.NameList[id], true
-		}
-		i -= len(pos)
-		if len(t.dict.Contents) <= t.ID {
-			return "", false
-		}
-		c := t.dict.Contents[t.ID]
-		if i >= len(c) {
-			return "", false
-		}
-		return c[i], true
-	case UNKNOWN:
-		if len(t.dict.UnkDict.Contents) <= t.ID {
-			return "", false
-		}
-		c := t.dict.UnkDict.Contents[t.ID]
-		if i >= len(c) {
-			return "", false
-		}
-		return c[i], true
-	case USER:
-		if len(t.udict.Contents) <= t.ID {
-			return "", false
-		}
-		switch i {
-		case 0:
-			return t.udict.Contents[t.ID].Pos, true
-		case 1:
-			return strings.Join(t.udict.Contents[t.ID].Tokens, "/"), true
-		case 2:
-			return strings.Join(t.udict.Contents[t.ID].Yomi, "/"), true
-		}
-	case DUMMY:
-		return "", false
-	}
-	return "", false
-}
+func (t Token) FeatureAt(i int) (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 // UserExtra represents custom segmentation and custom reading for user entries.
 type UserExtra struct {
@@ -142,132 +50,45 @@ type UserExtra struct {
 }
 
 // UserExtra returns extra data if token comes from a user dict.
-func (t Token) UserExtra() *UserExtra {
-	if t.Class != USER {
-		return nil
-	}
-	tokens := make([]string, len(t.udict.Contents[t.ID].Tokens))
-	copy(tokens, t.udict.Contents[t.ID].Tokens)
-	yomi := make([]string, len(t.udict.Contents[t.ID].Yomi))
-	copy(yomi, t.udict.Contents[t.ID].Yomi)
-	return &UserExtra{
-		Tokens:   tokens,
-		Readings: yomi,
-	}
-}
+func (t Token) UserExtra() *UserExtra { _ = "STUB: not implemented"; return nil }
 
 // POS returns POS elements of features.
-func (t Token) POS() []string {
-	switch t.Class {
-	case KNOWN:
-		ret := make([]string, 0, len(t.dict.POSTable.POSs[t.ID]))
-		for _, id := range t.dict.POSTable.POSs[t.ID] {
-			ret = append(ret, t.dict.POSTable.NameList[id])
-		}
-		return ret
-	case UNKNOWN:
-		start := 0
-		if v, ok := t.dict.UnkDict.ContentsMeta[dict.POSStartIndex]; ok {
-			start = int(v)
-		}
-		end := 1
-		if v, ok := t.dict.UnkDict.ContentsMeta[dict.POSHierarchy]; ok {
-			end = start + int(v)
-		}
-		feature := t.dict.UnkDict.Contents[t.ID]
-		if start >= end || end > len(feature) {
-			return nil
-		}
-		ret := make([]string, 0, end-start)
-		for i := start; i < end; i++ {
-			ret = append(ret, feature[i])
-		}
-		return ret
-	case USER:
-		pos := t.udict.Contents[t.ID].Pos
-		return []string{pos}
-	case DUMMY:
-		return nil
-	}
-	return nil
-}
+func (t Token) POS() []string { _ = "STUB: not implemented"; return nil }
 
 // EqualFeatures returns true, if the features of tokens are equal.
-func (t Token) EqualFeatures(tt Token) bool {
-	return EqualFeatures(t.Features(), tt.Features())
-}
+func (t Token) EqualFeatures(tt Token) bool { _ = "STUB: not implemented"; return false }
 
 // EqualPOS returns true, if the POSs of tokens are equal.
-func (t Token) EqualPOS(tt Token) bool {
-	return EqualFeatures(t.POS(), tt.POS())
-}
+func (t Token) EqualPOS(tt Token) bool { _ = "STUB: not implemented"; return false }
 
 // EqualFeatures returns true, if the features are equal.
-func EqualFeatures(lhs, rhs []string) bool {
-	if len(lhs) != len(rhs) {
-		return false
-	}
-	for i := range lhs {
-		if lhs[i] != rhs[i] {
-			return false
-		}
-	}
-	return true
-}
+func EqualFeatures(lhs, rhs []string) bool { _ = "STUB: not implemented"; return false }
 
 // InflectionalType returns the inflectional type feature if exists.
-func (t Token) InflectionalType() (string, bool) {
-	return t.pickupFromFeatures(dict.InflectionalType)
-}
+func (t Token) InflectionalType() (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 // InflectionalForm returns the inflectional form feature if exists.
-func (t Token) InflectionalForm() (string, bool) {
-	return t.pickupFromFeatures(dict.InflectionalForm)
-}
+func (t Token) InflectionalForm() (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 // BaseForm returns the base form features if exists.
-func (t Token) BaseForm() (string, bool) {
-	return t.pickupFromFeatures(dict.BaseFormIndex)
-}
+func (t Token) BaseForm() (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 // Reading returns the reading feature if exists.
-func (t Token) Reading() (string, bool) {
-	return t.pickupFromFeatures(dict.ReadingIndex)
-}
+func (t Token) Reading() (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 // Pronunciation returns the pronunciation feature if exists.
-func (t Token) Pronunciation() (string, bool) {
-	return t.pickupFromFeatures(dict.PronunciationIndex)
-}
+func (t Token) Pronunciation() (string, bool) { _ = "STUB: not implemented"; return "", false }
 
 func (t Token) pickupFromFeatures(key string) (string, bool) {
-	var meta dict.ContentsMeta
-	switch t.Class {
-	case KNOWN:
-		meta = t.dict.ContentsMeta
-	case UNKNOWN:
-		meta = t.dict.UnkDict.ContentsMeta
-	case DUMMY, USER:
-		return "", false
-	}
-	i, ok := meta[key]
-	if !ok {
-		return "", false
-	}
-	return t.FeatureAt(int(i))
+	_ = "STUB: not implemented"
+	return "", false
 }
 
 // String returns a string representation of a token.
-func (t Token) String() string {
-	return fmt.Sprintf("%d:%q (%d: %d, %d) %v [%d]", t.Index, t.Surface, t.Position, t.Start, t.End, t.Class, t.ID)
-}
+func (t Token) String() string { _ = "STUB: not implemented"; return "" }
 
 // Equal returns true if tokens are equal.
-func (t Token) Equal(v Token) bool {
-	return t.ID == v.ID &&
-		t.Class == v.Class &&
-		t.Surface == v.Surface
-}
+func (t Token) Equal(v Token) bool { _ = "STUB: not implemented"; return false }
 
 // TokenData is a data format with all the contents of the token.
 type TokenData struct {
@@ -284,24 +105,4 @@ type TokenData struct {
 }
 
 // NewTokenData returns a data which has with all the contents of the token.
-func NewTokenData(t Token) TokenData {
-	ret := TokenData{
-		ID:       t.ID,
-		Start:    t.Start,
-		End:      t.End,
-		Surface:  t.Surface,
-		Class:    t.Class.String(),
-		POS:      t.POS(),
-		Features: t.Features(),
-	}
-	if ret.POS == nil {
-		ret.POS = []string{}
-	}
-	if ret.Features == nil {
-		ret.Features = []string{}
-	}
-	ret.BaseForm, _ = t.BaseForm()
-	ret.Reading, _ = t.Reading()
-	ret.Pronunciation, _ = t.Pronunciation()
-	return ret
-}
+func NewTokenData(t Token) TokenData { _ = "STUB: not implemented"; return *new(TokenData) }

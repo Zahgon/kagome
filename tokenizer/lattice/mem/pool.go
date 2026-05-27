@@ -19,22 +19,12 @@ type Pool[T any] struct {
 
 // NewPool returns a memory pool of T. newF is a constructor of T, and it is called
 // when the memory pool is empty.
-func NewPool[T any](newF func() *T) Pool[T] {
-	return Pool[T]{
-		internal: &sync.Pool{
-			New: func() any {
-				return newF()
-			},
-		},
-	}
-}
+func NewPool[T any](newF func() *T) Pool[T] { _ = "STUB: not implemented"; return nil }
 
 // Get gets instance of T from the memory pool.
-func (p Pool[T]) Get() *T {
-	return p.internal.Get().(*T) //nolint:forcetypeassert
-}
+func (p Pool[T]) Get() *T { _ = "STUB: not implemented"; return nil }
+
+//nolint:forcetypeassert
 
 // Put puts the instance to the memory pool.
-func (p Pool[T]) Put(x *T) {
-	p.internal.Put(x)
-}
+func (p Pool[T]) Put(x *T) { _ = "STUB: not implemented"; return }

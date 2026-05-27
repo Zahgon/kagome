@@ -6,27 +6,17 @@ import (
 
 // Drop drops a token given the provided match function.
 func Drop(tokens *[]tokenizer.Token, match func(t tokenizer.Token) bool) {
-	applyFilter(match, tokens, true)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Keep keeps a token given the provided match function.
 func Keep(tokens *[]tokenizer.Token, match func(t tokenizer.Token) bool) {
-	applyFilter(match, tokens, false)
+	_ = "STUB: not implemented"
+	return
 }
 
 func applyFilter(match func(t tokenizer.Token) bool, tokens *[]tokenizer.Token, drop bool) {
-	if tokens == nil {
-		return
-	}
-	tail := 0
-	for i, v := range *tokens {
-		if match(v) == drop {
-			continue
-		}
-		if i != tail {
-			(*tokens)[tail] = v
-		}
-		tail++
-	}
-	*tokens = (*tokens)[:tail]
+	_ = "STUB: not implemented"
+	return
 }

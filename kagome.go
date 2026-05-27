@@ -5,9 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
-	"runtime/debug"
-	"strings"
 
 	"github.com/ikawaha/kagome/v2/cmd/lattice"
 	"github.com/ikawaha/kagome/v2/cmd/sentence"
@@ -76,43 +73,13 @@ var (
 )
 
 // Usage prints information about the tool
-func Usage() {
-	fmt.Fprintf(errorWriter, "Japanese Morphological Analyzer -- github.com/ikawaha/kagome/v2\n")
-	fmt.Fprintf(errorWriter, "usage: %s <command>\n", filepath.Base(os.Args[0]))
-}
+func Usage() { _ = "STUB: not implemented"; return }
 
 // ShowVersion prints the version about the tool.
-func ShowVersion() {
-	info, ok := debug.ReadBuildInfo()
-	if ok && version == "" {
-		version = info.Main.Version
-	}
-	if version == "" {
-		version = "(devel)"
-	}
-	fmt.Fprintln(errorWriter, version)
-	if !ok {
-		return
-	}
-	const prefix = "github.com/ikawaha/kagome-dict/"
-	for _, v := range info.Deps {
-		if strings.HasPrefix(v.Path, prefix) {
-			fmt.Fprintln(errorWriter, "  ", v.Path[len(prefix):], v.Version)
-		}
-	}
-}
+func ShowVersion() { _ = "STUB: not implemented"; return }
 
 // PrintDefaults prints out the default flags
-func PrintDefaults() {
-	fmt.Fprintln(errorWriter, "The commands are:")
-	for _, c := range subcommands {
-		if c.Name == defaultSubcommand.Name {
-			fmt.Fprintf(errorWriter, "   [%s] - %s (*default)\n", c.Name, c.Description)
-		} else {
-			fmt.Fprintf(errorWriter, "   %s - %s\n", c.Name, c.Description)
-		}
-	}
-}
+func PrintDefaults() { _ = "STUB: not implemented"; return }
 
 func main() {
 	var run func(context.Context, []string) error
